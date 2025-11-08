@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About -- 113306063</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        table {
+            width: 90%; /* 設置表格寬度 */
+            border-collapse: collapse; /* 讓邊框合併 */
+            border: 3px solid #333; /* 表格外框 */
+            margin: 0 auto; /* 置中表格 */
+            background-color: #fff;
+        }
+        /* 將表格劃分為三個邏輯欄位 */
+        td {
+            border: 1px solid #ccc; /* 儲存格邊框 */
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        /* 調整欄寬: 圖片欄 (15%), 內容欄 1 (40%), 內容欄 2 (45%) */
+        tr td:nth-child(1):not(.header-cell) {
+            width: 25%; 
+        }
+        tr td:nth-child(2):not(.header-cell) {
+            width: 50%; 
+        }
+        tr td:nth-child(3):not(.header-cell) {
+            width: 40%; 
+        }
+
+        .header-cell {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            background-color: #e0e0e0;
+        }
+        .photo-cell {
+            text-align: center;
+        }
+        .photo-cell img {
+            width: 150px; /* 範例圖片寬度 */
+            height: auto;
+            display: block;
+            margin: 6px auto;
+        }
+        textarea {
+            width: 60%; 
+            box-sizing: border-box; /* 確保 padding 不會增加總寬度 */
+            resize: none;
+        }
+        /* 調整按鈕區塊的樣式 */
+        .button-row td {
+            text-align: left; 
+            padding-left: 10px;
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+
+<form action="#" method="post">
+    <table>
+        
+        <tr>
+            <td colspan="3" class="header-cell">
+                About -- 113306063
+            </td>
+        </tr>
+        
+        <tr>
+            <td rowspan="3" class="photo-cell">
+                <img src="image.jpg" alt="personal photo"> 
+                <p>personal photo</p>
+            </td>
+            
+            <td colspan="2"> 
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required style="width: 70%;">
+                <br><br>
+                <span>Gender:</span>
+                <input type="radio" id="male" name="gender" value="Male">
+                <label for="male">Male</label>
+                <input type="radio" id="female" name="gender" value="Female">
+                <label for="female">Female</label>
+                <input type="radio" id="other" name="gender" value="Other">
+                <label for="other">Other</label>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>
+                <label for="county">County:</label>
+                <select id="county" name="county">
+                    <option value="Taipei">Taipei</option>
+                    <option value="Tainan">Tainan</option>
+                    <option value="Taichung">Taichung</option>
+                    <option value="Taoyuan">Taoyuan</option>
+                </select>
+            </td>
+            
+            <td>
+                <label for="birthday">Birthday:</label>
+                <input type="date" id="birthday" name="birthday"> 年/月/日
+            </td>
+        </tr>
+        
+        <tr>
+            <td colspan="2">
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email" required style="width: 80%;">
+            </td>
+        </tr>
+        
+        <tr>
+            <td>Hobby</td>
+            <td colspan="2">
+                <input type="checkbox" id="swimming" name="hobby" value="Swimming">
+                <label for="swimming">Swimming</label>
+                <input type="checkbox" id="volleyball" name="hobby" value="Volleyball">
+                <label for="volleyball">Volleyball</label>
+                <input type="checkbox" id="movie" name="hobby" value="Movie">
+                <label for="movie">Movie</label>
+                <input type="checkbox" id="game" name="hobby" value="Game">
+                <label for="game">Game</label>
+                <input type="checkbox" id="sleep" name="hobby" value="sleep">
+                <label for="sleep">sleep</label>
+            </td>
+        </tr>
+        
+        <tr>
+	        <td>Skill:</td>
+	        <td colspan="2">
+	            <input type="checkbox" name="skill" value="java"> Java
+	            <input type="checkbox" name="skill" value="html"> HTML
+	            <input type="checkbox" name="skill" value="python"> Python
+	            <input type="checkbox" name="skill" value="office"> Microsoft Office
+	            <input type="checkbox" name="skill" value="premiere"> Premiere
+	        </td>
+	    </tr>
+
+	    <tr>
+	        <td>Say something:</td>
+	        <td colspan="2">
+	            <textarea placeholder="Say something here." rows="2"></textarea>
+	        </td>
+	    </tr>
+
+	    <tr class="button-row">
+	        <td colspan="3">
+	            <input type="submit" value = "提交">
+	            <input type="reset" value = "重設">
+	        </td>
+	    </tr>
+	 </table>
+</form>
+</body>
+</html>
