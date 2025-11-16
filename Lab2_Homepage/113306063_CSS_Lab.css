@@ -25,9 +25,9 @@ div{margin: 0;}
 }
 
 .navbar > ul{
-	position: relative;  /* 不會影響佈局，因為沒有偏移 */
-    top: 0em;            /* 0em = 沒有偏移 */
-    left: 0em;           /* 0em = 沒有偏移 */
+	position: relative;  
+    top: 0em;            
+    left: 0em;         
     width: 100%;  
 	display: flex;
 	justify-content: space-between;
