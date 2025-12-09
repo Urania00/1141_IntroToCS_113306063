@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>111306086_1A2B Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        h1 {
+            text-align: center;
+            padding: 25px;
+            background-color: #2a2a2a;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            font-size: 26px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        .game-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .input-area {
+            margin-bottom: 30px;
+            background-color: #2a2a2a;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .input-area label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 12px;
+        }
+        
+        input {
+            flex: 1;
+            padding: 14px;
+            background-color: #1a1a1a;
+            border: 2px solid #444;
+            color: #e0e0e0;
+            font-size: 16px;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #666;
+        }
+        
+        button {
+            padding: 14px 35px;
+            background-color: #3a3a3a;
+            color: #e0e0e0;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            font-weight: 500;
+        }
+        
+        button:hover {
+            background-color: #4a4a4a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .record-container {
+            background-color: #2a2a2a;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .record-header {
+            font-weight: bold;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #444;
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+        }
+        
+        .record-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .record-entry {
+            padding: 14px;
+            margin-bottom: 10px;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s;
+        }
+        
+        .record-entry:hover {
+            background-color: #252525;
+            transform: translateX(5px);
+        }
+        
+        .attempt-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .attempt-num {
+            color: #888;
+            font-size: 13px;
+            min-width: 50px;
+        }
+        
+        .guess-text {
+            letter-spacing: 4px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .result-text {
+            background-color: #3a3a3a;
+            color: #e0e0e0;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #666;
+            padding: 40px 0;
+            font-style: italic;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>111306086_HW7_1A2B</h1>
+        
+        <div class="input-area">
+            <label>Enter 4 unique numbers:</label>
+            <div class="input-group">
+                <input type="text" id="guessInput" maxlength="4" placeholder="e.g., 1234">
+                <button onclick="play()">Guess!</button>
+            </div>
+        </div>
+        
+        <div class="record-container">
+            <div class="record-header">
+                <span>Game Record</span>
+                <span>Attempts: <span id="totalAttempts">0</span></span>
+            </div>
+            <div class="record-list" id="recordArea">
+                <div class="empty-state">尚無猜測記錄</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let answer = generateAnswer();
+        let attemptCount = 0;
+
+        function generateAnswer() {
+            let digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+            let result = "";
+            
+            for (let i = 0; i < 4; i++) {
+                let randomIndex = Math.floor(Math.random() * digits.length);
+                result += digits[randomIndex];
+                digits.splice(randomIndex, 1);
+            }
+            
+            return result;
+        }
+
+        function play() {
+            let input = document.getElementById("guessInput").value.trim();
+            
+            if (!isValid(input)) {
+                return;
+            }
+            
+            attemptCount++;
+            document.getElementById("totalAttempts").textContent = attemptCount;
+            
+            let result = checkAB(input, answer);
+            
+            displayRecord(attemptCount, input, result);
+            
+            document.getElementById("guessInput").value = "";
+            
+            if (result === "4A0B") {
+                alert("恭喜！您猜對了！\n總共嘗試了 " + attemptCount + " 次");
+            }
+        }
+
+        function isValid(str) {
+            if (str.length !== 4) {
+                alert("錯誤：請輸入正好4位數字！");
+                return false;
+            }
+            
+            if (isNaN(str)) {
+                alert("錯誤：請只輸入數字！");
+                return false;
+            }
+            
+            let digits = str.split("");
+            let uniqueDigits = new Set(digits);
+            if (uniqueDigits.size !== 4) {
+                alert("錯誤：數字不可重複！");
+                return false;
+            }
+            
+            return true;
+        }
+
+        function checkAB(guess, ans) {
+            let a = 0;
+            let b = 0;
+            
+            let guessArray = guess.split("");
+            let ansArray = ans.split("");
+            
+            for (let i = 0; i < 4; i++) {
+                if (guessArray[i] === ansArray[i]) {
+                    a++;
+                } else if (ansArray.includes(guessArray[i])) {
+                    b++;
+                }
+            }
+            
+            return a + "A" + b + "B";
+        }
+
+        function displayRecord(attempt, guess, result) {
+            let recordArea = document.getElementById("recordArea");
+            
+            if (attempt === 1) {
+                recordArea.innerHTML = "";
+            }
+            
+            let recordEntry = document.createElement("div");
+            recordEntry.className = "record-entry";
+            recordEntry.innerHTML = `
+                <div class="attempt-info">
+                    <span class="attempt-num">#${attempt}</span>
+                    <span class="guess-text">${guess}</span>
+                </div>
+                <span class="result-text">${result}</span>
+            `;
+            
+            recordArea.appendChild(recordEntry);
+            recordArea.scrollTop = recordArea.scrollHeight;
+        }
+
+        document.getElementById("guessInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                play();
+            }
+        });
+    </script>
+</body>
+</html>
