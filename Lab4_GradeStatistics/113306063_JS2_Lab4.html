@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Statistics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .deadline {
+            text-align: center;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .input-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 150px;
+            font-size: 14px;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        button {
+            padding: 10px 30px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #ecf0f1;
+            font-weight: bold;
+            color: #333;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        tfoot {
+            background-color: #ecf0f1;
+            font-weight: bold;
+        }
+
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container"> 
+        <div class="input-section">
+            <input type="number" id="mathGrade" placeholder="Math" min="0" max="100">
+            <input type="number" id="englishGrade" placeholder="English" min="0" max="100">
+            <button id="submitBtn">Submit</button>
+        </div>
+        
+        <div id="errorMsg" class="error"></div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Math</th>
+                    <th>English</th>
+                    <th>Average</th>
+                </tr>
+            </thead>
+            <tbody id="gradesTable">
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>Average</td>
+                    <td id="mathAvg">0.00</td>
+                    <td id="englishAvg">0.00</td>
+                    <td id="overallAvg">0.00</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <script>
+        let rowCount = 0;
+        const grades = [];
+
+        const mathInput = document.getElementById('mathGrade');
+        const englishInput = document.getElementById('englishGrade');
+        const submitBtn = document.getElementById('submitBtn');
+        const gradesTable = document.getElementById('gradesTable');
+        const errorMsg = document.getElementById('errorMsg');
+
+        submitBtn.addEventListener("click", function() {
+            errorMsg.textContent = '';
+            
+            const mathGrade = parseFloat(mathInput.value);
+            const englishGrade = parseFloat(englishInput.value);
+            
+            if (isNaN(mathGrade) || isNaN(englishGrade)) {
+                errorMsg.textContent = 'Please enter valid numbers for both grades.';
+                return;
+            }
+            
+            if (mathGrade < 0 || mathGrade > 100 || englishGrade < 0 || englishGrade > 100) {
+                errorMsg.textContent = 'Grades must be between 0 and 100.';
+                return;
+            }
+            
+            rowCount++;
+            grades.push({ math: mathGrade, english: englishGrade });
+            
+            const rowAverage = ((mathGrade + englishGrade) / 2).toFixed(2);
+            
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${rowCount}</td>
+                <td>${mathGrade}</td>
+                <td>${englishGrade}</td>
+                <td>${rowAverage}</td>
+            `;
+            
+            gradesTable.appendChild(newRow);
+            
+            updateColumnAverages();
+            
+            // Clear inputs
+            mathInput.value = '';
+            englishInput.value = '';
+            mathInput.focus();
+        });
+
+        function updateColumnAverages() {
+            if (grades.length === 0) return;
+            
+            const mathSum = grades.reduce((sum, grade) => sum + grade.math, 0);
+            const mathAverage = (mathSum / grades.length).toFixed(2);
+            
+            const englishSum = grades.reduce((sum, grade) => sum + grade.english, 0);
+            const englishAverage = (englishSum / grades.length).toFixed(2);
+            
+            const overallAverage = ((mathSum + englishSum) / (grades.length * 2)).toFixed(2);
+            
+            document.getElementById('mathAvg').textContent = mathAverage;
+            document.getElementById('englishAvg').textContent = englishAverage;
+            document.getElementById('overallAvg').textContent = overallAverage;
+        }
+
+        mathInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') submitBtn.click();
+        });
+        
+        englishInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') submitBtn.click();
+        });
+    </script>
+</body>
+</html>
